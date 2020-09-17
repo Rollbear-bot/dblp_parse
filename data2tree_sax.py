@@ -20,9 +20,18 @@ class TestHandler(sax.ContentHandler):
         :return:
         """
         self._tag = name
-        if name == "dblp":
-            print("=========dblp=========")
-        # if self._tag == "book":
+        if name == "phdthesis":
+            print("=========phdthesis=========")
+            mdate = attrs["mdate"]
+            key = attrs["key"]
+            print("mdate", mdate)
+            print("key", key)
+
+        # 子元素
+        # if self._tag == "mdate":
+        #     print("BOOK: " + attrs["category"])
+        #     print("--------------------------")
+        # if self._tag == "key":
         #     print("BOOK: " + attrs["category"])
         #     print("--------------------------")
 
