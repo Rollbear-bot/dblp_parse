@@ -20,7 +20,8 @@ class TestHandler(sax.ContentHandler):
 
     def startElement(self, name, attrs):
         """
-        # 遇到<tag>标签时候会执行的方法，这里的name，attrs不用自己传值的（这里其实是重写）
+        # 遇到<tag>标签时候会执行的方法，
+        这里的name，attrs不用自己传值的（这里其实是重写）
         :param name:
         :param attrs:
         :return:
@@ -29,6 +30,8 @@ class TestHandler(sax.ContentHandler):
         if name == "phdthesis":
             # 初始化作者计数器
             self.author_count = 0
+            # 初始化存储字典
+            self.cluster = {}
 
             print("=========phdthesis=========")
             mdate = attrs["mdate"]
@@ -54,14 +57,19 @@ class TestHandler(sax.ContentHandler):
             print("=========dblp=========")
 
         elif name == "phdthesis":
-            # thesis end
+            # thesis end: collecting end
             # self.cluster["phdthesis"] = self._content
-            print(self.cluster)
+            if len(self.cluster["author"]) >= 2:
+                print(self.cluster)
         elif name == "author":
             # 计数器自加
             self.author_count += 1
             # print("author: " + self._content)
-            self.cluster["author"] = self._content
+            # author可能有多个
+            if "author" in self.cluster:
+                self.cluster["author"].append(self._content)
+            else:
+                self.cluster["author"] = [self._content]
         elif name == "title":
             # print("title: " + self._content)
             self.cluster["title"] = self._content
