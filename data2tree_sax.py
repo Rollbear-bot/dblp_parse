@@ -4,6 +4,10 @@
 # @Filename: data2tree_sax.py
 
 from xml import sax
+import json
+
+# 全局变量
+DATA_LT = []
 
 
 class TestHandler(sax.ContentHandler):
@@ -61,7 +65,10 @@ class TestHandler(sax.ContentHandler):
             # self.cluster["phdthesis"] = self._content
             if "author" in self.cluster and\
                     len(self.cluster["author"]) >= 2:
-                print(self.cluster)
+                # 仅当文献作者大于一个才储存该样本
+                # print(self.cluster)
+                DATA_LT.append(self.cluster)
+
         elif name == "author":
             # 计数器自加
             self.author_count += 1
@@ -97,11 +104,20 @@ class TestHandler(sax.ContentHandler):
         self._content = content
 
 
+def data2json(json_dump_path, obj):
+    """将解析得到数据转化为json文件"""
+    with open(json_dump_path, "w") as wf:
+        json.dump(obj, wf, indent=4)
+
+
 def main():
     test_file_path = "../dblp-2020-09-01.xml"
+    json_dump_path = "./resource/co_author_data.json"
 
     handler = TestHandler()  # 自定义类实例化成对象
     sax.parse(test_file_path, handler)  # 解析xml文件
+
+    data2json(json_dump_path, DATA_LT)
 
 
 if __name__ == '__main__':
