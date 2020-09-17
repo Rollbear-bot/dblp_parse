@@ -67,7 +67,7 @@ class TestHandler(sax.ContentHandler):
 
 
 def main():
-    test_file_path = "./resource/test2.xml"
+    test_file_path = "../dblp-2020-09-01.xml"
 
     handler = TestHandler()  # 自定义类实例化成对象
     sax.parse(test_file_path, handler)  # 解析xml文件
