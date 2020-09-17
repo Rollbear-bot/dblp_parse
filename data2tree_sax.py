@@ -12,15 +12,6 @@ class TestHandler(sax.ContentHandler):
         self._content = ""
         self._tag = ""
 
-        #         self.phdthesis = ""
-        #         self.author = ""
-        #         self.title = ""
-        #         self.year = ""
-        #         self.school = ""
-        #         self.pages = ""
-        #         self.isbn = ""
-        #         self.ee = ""
-
     def startElement(self, name, attrs):
         """
         # 遇到<tag>标签时候会执行的方法，这里的name，attrs不用自己传值的（这里其实是重写）
@@ -43,6 +34,7 @@ class TestHandler(sax.ContentHandler):
         """
         if name == "dblp":
             print("=========dblp=========")
+
         elif name == "phdthesis":
             print("phdthesis: " + self._content)
         elif name == "author":
@@ -53,12 +45,16 @@ class TestHandler(sax.ContentHandler):
             print("year: " + self._content)
         elif name == "school":
             print("school: " + self._content)
-        elif name == "pages":
-            print("pages: " + self._content)
-        elif name == "isbn":
-            print("isbn: " + self._content)
-        elif name == "ee":
-            print("ee: " + self._content)
+
+        # --------------------------------
+        # 先考虑与共同作者有关的字段，忽略其他信息
+
+        # elif name == "pages":
+        #     print("pages: " + self._content)
+        # elif name == "isbn":
+        #     print("isbn: " + self._content)
+        # elif name == "ee":
+        #     print("ee: " + self._content)
         else:
             pass
 
