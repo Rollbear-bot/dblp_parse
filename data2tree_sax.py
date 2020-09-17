@@ -12,6 +12,12 @@ class TestHandler(sax.ContentHandler):
         self._content = ""
         self._tag = ""
 
+        # 共同作者计数器
+        self.author_count = 0
+
+        # 使用一个dict来存储一个meta data
+        self.cluster = {}
+
     def startElement(self, name, attrs):
         """
         # 遇到<tag>标签时候会执行的方法，这里的name，attrs不用自己传值的（这里其实是重写）
@@ -21,6 +27,9 @@ class TestHandler(sax.ContentHandler):
         """
         self._tag = name
         if name == "phdthesis":
+            # 初始化作者计数器
+            self.author_count = 0
+
             print("=========phdthesis=========")
             mdate = attrs["mdate"]
             key = attrs["key"]
@@ -45,15 +54,23 @@ class TestHandler(sax.ContentHandler):
             print("=========dblp=========")
 
         elif name == "phdthesis":
-            print("phdthesis: " + self._content)
+            # thesis end
+            # self.cluster["phdthesis"] = self._content
+            print(self.cluster)
         elif name == "author":
-            print("author: " + self._content)
+            # 计数器自加
+            self.author_count += 1
+            # print("author: " + self._content)
+            self.cluster["author"] = self._content
         elif name == "title":
-            print("title: " + self._content)
+            # print("title: " + self._content)
+            self.cluster["title"] = self._content
         elif name == "year":
-            print("year: " + self._content)
+            # print("year: " + self._content)
+            self.cluster["year"] = self._content
         elif name == "school":
-            print("school: " + self._content)
+            # print("school: " + self._content)
+            self.cluster["school"] = self._content
 
         # --------------------------------
         # 先考虑与共同作者有关的字段，忽略其他信息
