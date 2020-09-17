@@ -33,11 +33,11 @@ class TestHandler(sax.ContentHandler):
             # 初始化存储字典
             self.cluster = {}
 
-            print("=========phdthesis=========")
             mdate = attrs["mdate"]
             key = attrs["key"]
-            print("mdate", mdate)
-            print("key", key)
+
+            self.cluster["mdate"] = mdate
+            self.cluster["key"] = key
 
         # 子元素
         # if self._tag == "mdate":
