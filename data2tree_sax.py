@@ -59,7 +59,8 @@ class TestHandler(sax.ContentHandler):
         elif name == "phdthesis":
             # thesis end: collecting end
             # self.cluster["phdthesis"] = self._content
-            if len(self.cluster["author"]) >= 2:
+            if len("author" in self.cluster and
+                   self.cluster["author"]) >= 2:
                 print(self.cluster)
         elif name == "author":
             # 计数器自加
