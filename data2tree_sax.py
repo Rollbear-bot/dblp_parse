@@ -44,8 +44,8 @@ class TestHandler(sax.ContentHandler):
             # 初始化存储字典
             self.cluster = {}
 
-            mdate = attrs["mdate"]
-            key = attrs["key"]
+            mdate = attrs["mdate"] if "mdate" in attrs else None
+            key = attrs["key"] if "key" in attrs else None
 
             self.cluster["mdate"] = mdate
             self.cluster["key"] = key
