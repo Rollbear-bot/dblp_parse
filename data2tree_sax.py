@@ -31,14 +31,15 @@ class TestHandler(sax.ContentHandler):
         :return:
         """
         self._tag = name
-        if name == "phdthesis" or \
-                "article" or \
-                "inproceedings" or \
-                "proceedings" or \
-                "book" or \
-                "incollection" or \
-                "mastersthesis" or \
-                "www":
+        # if name == "phdthesis" or \
+        #         "article" or \
+        #         "inproceedings" or \
+        #         "proceedings" or \
+        #         "book" or \
+        #         "incollection" or \
+        #         "mastersthesis" or \
+        #         "www":
+        if name == "mastersthesis":
             # 初始化作者计数器
             self.author_count = 0
             # 初始化存储字典
@@ -67,14 +68,15 @@ class TestHandler(sax.ContentHandler):
         if name == "dblp":
             print("=========dblp=========")
 
-        elif name == "phdthesis" or \
-                "article" or \
-                "inproceedings" or \
-                "proceedings" or \
-                "book" or \
-                "incollection" or \
-                "mastersthesis" or \
-                "www":
+        if name == "mastersthesis":
+        # elif name == "phdthesis" or \
+        #         "article" or \
+        #         "inproceedings" or \
+        #         "proceedings" or \
+        #         "book" or \
+        #         "incollection" or \
+        #         "mastersthesis" or \
+        #         "www":
             # thesis end: collecting end
             # self.cluster["phdthesis"] = self._content
             if "author" in self.cluster and \
