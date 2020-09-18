@@ -31,7 +31,14 @@ class TestHandler(sax.ContentHandler):
         :return:
         """
         self._tag = name
-        if name == "phdthesis":
+        if name == "phdthesis" or \
+                "article" or \
+                "inproceedings" or \
+                "proceedings" or \
+                "book" or \
+                "incollection" or \
+                "mastersthesis" or \
+                "www":
             # 初始化作者计数器
             self.author_count = 0
             # 初始化存储字典
@@ -60,12 +67,19 @@ class TestHandler(sax.ContentHandler):
         if name == "dblp":
             print("=========dblp=========")
 
-        elif name == "phdthesis":
+        elif name == "phdthesis" or \
+                "article" or \
+                "inproceedings" or \
+                "proceedings" or \
+                "book" or \
+                "incollection" or \
+                "mastersthesis" or \
+                "www":
             # thesis end: collecting end
             # self.cluster["phdthesis"] = self._content
-            if "author" in self.cluster and\
+            if "author" in self.cluster and \
                     len(self.cluster["author"]) >= 2:
-                # 仅当文献作者大于一个才储存该样本
+                # 仅当文献作者大于一个才储存该样本（研究合著关系图）
                 # print(self.cluster)
                 DATA_LT.append(self.cluster)
 
@@ -112,7 +126,7 @@ def data2json(json_dump_path, obj):
 
 def main():
     test_file_path = "../dblp-2020-09-01.xml"
-    json_dump_path = "./resource/co_author_data.json"
+    json_dump_path = "./resource/co_author_data_total.json"
 
     handler = TestHandler()  # 自定义类实例化成对象
     sax.parse(test_file_path, handler)  # 解析xml文件
