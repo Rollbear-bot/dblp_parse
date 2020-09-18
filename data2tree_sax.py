@@ -39,7 +39,7 @@ class TestHandler(sax.ContentHandler):
         #         "incollection" or \
         #         "mastersthesis" or \
         #         "www":
-        if name == "mastersthesis":
+        if name == "phdthesis":
             # 初始化作者计数器
             self.author_count = 0
             # 初始化存储字典
@@ -68,7 +68,7 @@ class TestHandler(sax.ContentHandler):
         if name == "dblp":
             print("=========dblp=========")
 
-        if name == "mastersthesis":
+        elif name == "phdthesis":
         # elif name == "phdthesis" or \
         #         "article" or \
         #         "inproceedings" or \
