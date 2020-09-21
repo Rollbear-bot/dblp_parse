@@ -8,6 +8,8 @@ import json
 
 # 全局变量
 DATA_LT = []
+PHD_COUNT = 0  # phd文献计数器
+TOTAL_COUNT = 0  # 所有文献的计数器
 
 
 class TestHandler(sax.ContentHandler):
@@ -45,19 +47,24 @@ class TestHandler(sax.ContentHandler):
             # 初始化存储字典
             self.cluster = {}
 
+            # mdate和key是meta-tag
             mdate = attrs["mdate"] if "mdate" in attrs else None
             key = attrs["key"] if "key" in attrs else None
 
             self.cluster["mdate"] = mdate
             self.cluster["key"] = key
 
-        # 子元素
-        # if self._tag == "mdate":
-        #     print("BOOK: " + attrs["category"])
-        #     print("--------------------------")
-        # if self._tag == "key":
-        #     print("BOOK: " + attrs["category"])
-        #     print("--------------------------")
+            PHD_COUNT += 1  # 计数器自加
+
+        if name == "phdthesis" or \
+            "article" or \
+            "inproceedings" or \
+            "proceedings" or \
+            "book" or \
+            "incollection" or \
+            "mastersthesis" or \
+            "www":
+            TOTAL_COUNT += 1  # 全局计数器自加
 
     def endElement(self, name):
         """
@@ -78,7 +85,6 @@ class TestHandler(sax.ContentHandler):
         #         "mastersthesis" or \
         #         "www":
             # thesis end: collecting end
-            # self.cluster["phdthesis"] = self._content
             if "author" in self.cluster and \
                     len(self.cluster["author"]) >= 2:
                 # 仅当文献作者大于一个才储存该样本（研究合著关系图）
@@ -132,6 +138,9 @@ def main():
 
     handler = TestHandler()  # 自定义类实例化成对象
     sax.parse(test_file_path, handler)  # 解析xml文件
+
+    print("phd文献记录数：", PHD_COUNT)
+    print("所有文献记录数：", TOTAL_COUNT)
 
     data2json(json_dump_path, DATA_LT)
 
