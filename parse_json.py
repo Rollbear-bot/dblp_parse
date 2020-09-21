@@ -9,9 +9,9 @@ import pandas as pd
 
 
 def main():
-    json_path = "./resource/co_author_data.json"
-    author_map_path = "./resource/author_map.json"
-    co_author_edgelist_path = "./resource/co_author.edgelist"
+    json_path = "resource/co_author/phdthesis/co_author_data.json"
+    author_map_path = "resource/co_author/phdthesis/author_map.json"
+    co_author_edgelist_path = "resource/co_author/phdthesis/co_author.edgelist"
 
     with open(json_path, "r") as rf:
         data = json.load(rf)
