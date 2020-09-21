@@ -33,15 +33,15 @@ class TestHandler(sax.ContentHandler):
         :return:
         """
         self._tag = name
-        # if name == "phdthesis" or \
-        #         "article" or \
-        #         "inproceedings" or \
-        #         "proceedings" or \
-        #         "book" or \
-        #         "incollection" or \
-        #         "mastersthesis" or \
-        #         "www":
-        if name == "phdthesis":
+        if name == "phdthesis" or \
+                "article" or \
+                "inproceedings" or \
+                "proceedings" or \
+                "book" or \
+                "incollection" or \
+                "mastersthesis" or \
+                "www":
+        # if name == "phdthesis":
             # 初始化作者计数器
             self.author_count = 0
             # 初始化存储字典
@@ -55,7 +55,7 @@ class TestHandler(sax.ContentHandler):
             self.cluster["key"] = key
 
             global PHD_COUNT
-            PHD_COUNT += 1  # 计数器自加
+            # PHD_COUNT += 1  # 计数器自加
 
         if name == "phdthesis" or \
             "article" or \
@@ -77,15 +77,15 @@ class TestHandler(sax.ContentHandler):
         if name == "dblp":
             print("=========dblp=========")
 
-        elif name == "phdthesis":
-        # elif name == "phdthesis" or \
-        #         "article" or \
-        #         "inproceedings" or \
-        #         "proceedings" or \
-        #         "book" or \
-        #         "incollection" or \
-        #         "mastersthesis" or \
-        #         "www":
+        # elif name == "phdthesis":
+        elif name == "phdthesis" or \
+                "article" or \
+                "inproceedings" or \
+                "proceedings" or \
+                "book" or \
+                "incollection" or \
+                "mastersthesis" or \
+                "www":
             # thesis end: collecting end
             if "author" in self.cluster and \
                     len(self.cluster["author"]) >= 2:
