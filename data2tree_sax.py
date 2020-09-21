@@ -54,6 +54,7 @@ class TestHandler(sax.ContentHandler):
             self.cluster["mdate"] = mdate
             self.cluster["key"] = key
 
+            global PHD_COUNT
             PHD_COUNT += 1  # 计数器自加
 
         if name == "phdthesis" or \
@@ -64,6 +65,7 @@ class TestHandler(sax.ContentHandler):
             "incollection" or \
             "mastersthesis" or \
             "www":
+            global TOTAL_COUNT
             TOTAL_COUNT += 1  # 全局计数器自加
 
     def endElement(self, name):
@@ -89,6 +91,7 @@ class TestHandler(sax.ContentHandler):
                     len(self.cluster["author"]) >= 2:
                 # 仅当文献作者大于一个才储存该样本（研究合著关系图）
                 # print(self.cluster)
+                global DATA_LT  # 使用全局变量声明
                 DATA_LT.append(self.cluster)
 
         elif name == "author":
