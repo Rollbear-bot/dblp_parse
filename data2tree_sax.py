@@ -6,10 +6,13 @@
 from xml import sax
 import json
 
+from tqdm import tqdm
+
 # 全局变量
 DATA_LT = []
-PHD_COUNT = 0  # phd文献计数器
+CUR_COUNT = 0  # 当前种类文献计数器
 TOTAL_COUNT = 0  # 所有文献的计数器
+THESIS_TYPE = None  # 当前解析的文献种类
 
 
 class TestHandler(sax.ContentHandler):
@@ -33,15 +36,8 @@ class TestHandler(sax.ContentHandler):
         :return:
         """
         self._tag = name
-        if name == "phdthesis" or \
-                "article" or \
-                "inproceedings" or \
-                "proceedings" or \
-                "book" or \
-                "incollection" or \
-                "mastersthesis" or \
-                "www":
-        # if name == "phdthesis":
+        if name == THESIS_TYPE:
+            # if name == "phdthesis":
             # 初始化作者计数器
             self.author_count = 0
             # 初始化存储字典
@@ -54,17 +50,17 @@ class TestHandler(sax.ContentHandler):
             self.cluster["mdate"] = mdate
             self.cluster["key"] = key
 
-            global PHD_COUNT
-            # PHD_COUNT += 1  # 计数器自加
+            global CUR_COUNT
+            CUR_COUNT += 1  # 计数器自加
 
         if name == "phdthesis" or \
-            "article" or \
-            "inproceedings" or \
-            "proceedings" or \
-            "book" or \
-            "incollection" or \
-            "mastersthesis" or \
-            "www":
+                "article" or \
+                "inproceedings" or \
+                "proceedings" or \
+                "book" or \
+                "incollection" or \
+                "mastersthesis" or \
+                "www":
             global TOTAL_COUNT
             TOTAL_COUNT += 1  # 全局计数器自加
 
@@ -77,40 +73,25 @@ class TestHandler(sax.ContentHandler):
         if name == "dblp":
             print("=========dblp=========")
 
-        # elif name == "phdthesis":
-        elif name == "phdthesis" or \
-                "article" or \
-                "inproceedings" or \
-                "proceedings" or \
-                "book" or \
-                "incollection" or \
-                "mastersthesis" or \
-                "www":
-            # thesis end: collecting end
+        elif name == THESIS_TYPE:  # thesis end: collecting end
             if "author" in self.cluster and \
                     len(self.cluster["author"]) >= 2:
                 # 仅当文献作者大于一个才储存该样本（研究合著关系图）
-                # print(self.cluster)
                 global DATA_LT  # 使用全局变量声明
                 DATA_LT.append(self.cluster)
 
         elif name == "author":
-            # 计数器自加
-            self.author_count += 1
-            # print("author: " + self._content)
+            self.author_count += 1  # 计数器自加
             # author可能有多个
             if "author" in self.cluster:
                 self.cluster["author"].append(self._content)
             else:
                 self.cluster["author"] = [self._content]
         elif name == "title":
-            # print("title: " + self._content)
             self.cluster["title"] = self._content
         elif name == "year":
-            # print("year: " + self._content)
             self.cluster["year"] = self._content
         elif name == "school":
-            # print("school: " + self._content)
             self.cluster["school"] = self._content
 
         # --------------------------------
@@ -135,17 +116,50 @@ def data2json(json_dump_path, obj):
         json.dump(obj, wf, indent=4)
 
 
-def main():
-    test_file_path = "../dblp-2020-09-01.xml"
-    json_dump_path = "./resource/co_author_data_total.json"
-
+def process(file_path: str):
     handler = TestHandler()  # 自定义类实例化成对象
-    sax.parse(test_file_path, handler)  # 解析xml文件
+    sax.parse(file_path, handler)  # 解析xml文件
 
-    print("phd文献记录数：", PHD_COUNT)
+    print("该类别文献记录数：", CUR_COUNT)
     print("所有文献记录数：", TOTAL_COUNT)
 
+    # 生成json存储路径
+    json_dump_path = f"./resource/{THESIS_TYPE}_co_author_data.json"
     data2json(json_dump_path, DATA_LT)
+
+
+def main():
+    test_file_path = "../dblp-2020-09-01.xml"
+
+    thesis_types = ["phdthesis",
+                    "article",
+                    "inproceedings",
+                    "proceedings",
+                    "book",
+                    "incollection",
+                    "mastersthesis",
+                    "www"]
+    for t in tqdm(thesis_types):
+        global THESIS_TYPE, DATA_LT, CUR_COUNT, TOTAL_COUNT  # 绑定到全局变量
+        THESIS_TYPE = t  # 设置本轮迭代的文献类型
+
+        process(test_file_path)  # 按照设置的类别解析数据
+
+        # 重新初始化变量
+        DATA_LT = []  # 每轮迭代后，清空数据表中的数据
+        THESIS_TYPE = None
+        CUR_COUNT = 0
+        TOTAL_COUNT = 0
+
+    # json_dump_path = "./resource/co_author_data_total.json"
+    #
+    # handler = TestHandler()  # 自定义类实例化成对象
+    # sax.parse(test_file_path, handler)  # 解析xml文件
+    #
+    # print("phd文献记录数：", PHD_COUNT)
+    # print("所有文献记录数：", TOTAL_COUNT)
+    #
+    # data2json(json_dump_path, DATA_LT)
 
 
 if __name__ == '__main__':
