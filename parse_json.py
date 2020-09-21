@@ -6,12 +6,13 @@
 import json
 import csv
 import pandas as pd
+from tqdm import tqdm
 
 
-def main():
-    json_path = "resource/co_author/phdthesis/co_author_data.json"
-    author_map_path = "resource/co_author/phdthesis/author_map.json"
-    co_author_edgelist_path = "resource/co_author/phdthesis/co_author.edgelist"
+def parse_json(json_path, author_map_path, co_author_edgelist_path):
+    # json_path = "resource/co_author/phdthesis/co_author_data.json"
+    # author_map_path = "resource/co_author/phdthesis/author_map.json"
+    # co_author_edgelist_path = "resource/co_author/phdthesis/co_author.edgelist"
 
     with open(json_path, "r") as rf:
         data = json.load(rf)
@@ -46,4 +47,18 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    working_dir = "./resource/co_author/"
+
+    types = ["phdthesis",
+             "article",
+             "inproceedings",
+             "proceedings",
+             "book",
+             "incollection",
+             "mastersthesis",
+             "www"]
+    for t in tqdm(types):
+        json_path = working_dir + f"{t}_co_author_data.json"
+        author_map_path = working_dir + f"{t}_author_map.json"
+        co_author_edgelist_path = working_dir + f"{t}_co_author.edgelist"
+        parse_json(json_path, author_map_path, co_author_edgelist_path)
