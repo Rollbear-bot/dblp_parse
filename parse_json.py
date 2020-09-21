@@ -58,7 +58,7 @@ if __name__ == '__main__':
              "mastersthesis",
              "www"]
     for t in tqdm(types):
-        json_path = working_dir + f"{t}_co_author_data.json"
+        json_path = f"./resource/{t}_co_author_data.json"
         author_map_path = working_dir + f"{t}_author_map.json"
         co_author_edgelist_path = working_dir + f"{t}_co_author.edgelist"
         parse_json(json_path, author_map_path, co_author_edgelist_path)
