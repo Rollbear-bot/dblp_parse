@@ -16,6 +16,10 @@ def parse_json(json_path, author_map_path, co_author_edgelist_path):
 
     with open(json_path, "r") as rf:
         data = json.load(rf)
+       
+       # skip the empty files.
+        if len(data) is 0:
+            return
 
     author_map = {}
     author_count = 0
