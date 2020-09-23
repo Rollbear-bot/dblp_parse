@@ -45,7 +45,7 @@ class TestSplit(unittest.TestCase):
 
         assert True
 
-    def test_split_from_json(self):
+    def test_split_www(self):
         json_path = "./test_res/www_co_author_data.json"
         author_map_path = "./test_res/test_split/author_map.json"
         co_author_edgelist_path = "./test_res/test_split/"
@@ -62,6 +62,12 @@ class TestSplit(unittest.TestCase):
             assert len(e_lt_2019.readlines()) == 51130
         with open(working_dir + "2020.edgelist") as e_lt_2020:
             assert len(e_lt_2020.readlines()) == 64154
+
+    def test_split_incollection(self):
+        json_path = "./test_res/incollection_co_author_data.json"
+        author_map_path = "./test_res/test_split_incollection/author_map.json"
+        co_author_edgelist_path = "./test_res/test_split_incollection/"
+        split_from_json(json_path, author_map_path, co_author_edgelist_path)
 
 
 if __name__ == '__main__':
