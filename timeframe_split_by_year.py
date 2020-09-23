@@ -90,7 +90,7 @@ if __name__ == '__main__':
                    "incollection",
                    "www"]
     for t in tqdm(avail_types):
-        json_data_input_path = working_dir + f"{t}_co_author.edgelist"
+        json_data_input_path = "./resource/{t}_co_author_data.json"
         dataset_dump_path = working_dir + t + "/"
         author_map_dump_path = working_dir + t + f"/{t}_author_map.json"
         # 生成时间片
