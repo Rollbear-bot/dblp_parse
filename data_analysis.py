@@ -42,7 +42,7 @@ def dataset_description(working_dir: str, skip_abnormal_edgelist=True):
                 num_n, num_e = _dataset_description(working_dir + path)
                 data_info.append((path.split(".")[0], num_n, num_e))
 
-    data_info.sort(key=lambda item: int(item[0]))
+    data_info.sort(key=lambda item: item[0])
     return data_info
 
 
