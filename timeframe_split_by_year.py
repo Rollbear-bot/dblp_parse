@@ -69,11 +69,22 @@ def split_from_json(json_path, author_map_path, co_author_edgelist_path):
         with open(co_author_edgelist_path + str(record_item[0]) + ".edgelist", "w") as wf:
             for record in record_item[1]:
                 # 生成从一作到其他合著者的边，用空格作为两个节点的分隔符
-                for co_author in record["author"][1:]:
-                    edgelist.append(str(author_map[record["author"][0]]) +
-                                    " " +
-                                    str(author_map[co_author]) +
-                                    "\n")
+                # for co_author in record["author"][1:]:
+                #     edgelist.append(str(author_map[record["author"][0]]) +
+                #                     " " +
+                #                     str(author_map[co_author]) +
+                #                     "\n")
+
+                # 对合著者生成完全子图
+                for author_index, cur_author in enumerate(record["author"]):
+                    if author_index < len(record["author"])-1:  # 如果当前元素是列表的末位，就不用处理了
+                        other_authors = record["author"][author_index+1:]
+                        for other_author in other_authors:
+                            edgelist.append(str(author_map[cur_author]) +
+                                            " " +
+                                            str(author_map[other_author]) +
+                                            "\n")
+
             # 去掉最后一行末尾的换行符
             edgelist[-1] = edgelist[-1].rstrip()
             wf.writelines(edgelist)
