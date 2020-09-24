@@ -64,7 +64,7 @@ def split_from_json(json_path, author_map_path, co_author_edgelist_path):
         )
 
     # 保存图的边（合著关系）
-    for record_item in time_frame.items():
+    for record_item in tqdm(time_frame.items()):
         edgelist = []
         with open(co_author_edgelist_path + str(record_item[0]) + ".edgelist", "w") as wf:
             for record in record_item[1]:
