@@ -55,8 +55,8 @@ if __name__ == '__main__':
                    "www"]
     for t in tqdm(avail_types):
         wd = "./resource/co_author/" + t + "/"
-        # 不跳过异常数据
-        info = dataset_description(wd, skip_abnormal_edgelist=False)
+        # 跳过异常数据
+        info = dataset_description(wd, skip_abnormal_edgelist=True)
 
         # 将描述性数据写入数据集目录
         with open(wd + "dataset_description.csv", "w", newline="") as wf:

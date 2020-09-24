@@ -51,7 +51,7 @@ def parse_json(json_path, author_map_path, co_author_edgelist_path):
 
 
 if __name__ == '__main__':
-    working_dir = "./resource/co_author/"
+    working_dir = "../resource/co_author/"
 
     types = ["phdthesis",
              "article",
