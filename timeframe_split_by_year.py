@@ -108,7 +108,7 @@ if __name__ == '__main__':
     avail_types = ["phdthesis",
                    # "article",
                    # "inproceedings",
-                   "book",
+                   # "book",
                    "incollection",
                    "www"]
     for t in avail_types:
