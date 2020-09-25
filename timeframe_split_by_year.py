@@ -30,7 +30,8 @@ def split_from_json(json_path, author_map_path, co_author_edgelist_path, skip_ab
     author_map = {}
     author_count = 0  # 用于生成作者的id
 
-    for record in data:
+    print("split data base on time...")
+    for record in tqdm(data):
         # 按照时间划分文献
         # 注意year标签并不一定出现，此时考虑使用mdate字段的年份替代
         if "year" in record.keys():
@@ -62,6 +63,8 @@ def split_from_json(json_path, author_map_path, co_author_edgelist_path, skip_ab
     # 处理time cluster为时间片
     # todo::性能优化
     time_frame = {}
+
+    print("generating time frames...")
     for year in tqdm(time_cluster.keys()):
         # 某个时间点的时间片包含该时间以前的所有边
         time_frame[year] = reduce(
@@ -70,10 +73,12 @@ def split_from_json(json_path, author_map_path, co_author_edgelist_path, skip_ab
         )
 
     # 保存图的边（合著关系）
-    for record_item in time_frame.items():
+    print("generating edges...")
+    for record_index, record_item in enumerate(time_frame.items()):
+        print(f"{record_index}/{len(time_frame)}")
         edgelist = []
         with open(co_author_edgelist_path + str(record_item[0]) + ".edgelist", "w") as wf:
-            for record in record_item[1]:
+            for record in tqdm(record_item[1]):
                 # 生成从一作到其他合著者的边，用空格作为两个节点的分隔符
                 # for co_author in record["author"][1:]:
                 #     edgelist.append(str(author_map[record["author"][0]]) +
