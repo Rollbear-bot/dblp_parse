@@ -106,7 +106,7 @@ if __name__ == '__main__':
     working_dir = "./resource/co_author/"
     # proceedings和masterthesis类别是空的，这里不再处理
     avail_types = ["phdthesis",
-                   "article",
+                   # "article",
                    "inproceedings",
                    "book",
                    "incollection",
