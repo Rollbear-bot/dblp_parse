@@ -100,7 +100,8 @@ if __name__ == '__main__':
                    "book",
                    "incollection",
                    "www"]
-    for t in tqdm(avail_types):
+    for t in avail_types:
+        print(f"--------------{t}----------------")
         json_data_input_path = f"./resource/{t}_co_author_data.json"
         dataset_dump_path = working_dir + t + "/"
         author_map_dump_path = working_dir + t + f"/{t}_author_map.json"
