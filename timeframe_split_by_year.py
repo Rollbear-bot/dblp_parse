@@ -60,8 +60,9 @@ def split_from_json(json_path, author_map_path, co_author_edgelist_path, skip_ab
         json.dump(author_map, wf, indent=4)
 
     # 处理time cluster为时间片
+    # todo::性能优化
     time_frame = {}
-    for year in time_cluster.keys():
+    for year in tqdm(time_cluster.keys()):
         # 某个时间点的时间片包含该时间以前的所有边
         time_frame[year] = reduce(
             lambda x, y: x + y,  # 列表拼接
@@ -69,7 +70,7 @@ def split_from_json(json_path, author_map_path, co_author_edgelist_path, skip_ab
         )
 
     # 保存图的边（合著关系）
-    for record_item in tqdm(time_frame.items()):
+    for record_item in time_frame.items():
         edgelist = []
         with open(co_author_edgelist_path + str(record_item[0]) + ".edgelist", "w") as wf:
             for record in record_item[1]:
