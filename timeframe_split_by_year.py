@@ -109,7 +109,7 @@ if __name__ == '__main__':
                    # "article",
                    # "inproceedings",
                    # "book",
-                   "incollection",
+                   # "incollection",
                    "www"]
     for t in avail_types:
         print(f"--------------{t}----------------")
