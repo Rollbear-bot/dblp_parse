@@ -10,9 +10,10 @@ import json
 from functools import reduce  # 列表累加
 
 
-def split_from_json(json_path, author_map_path, co_author_edgelist_path):
+def split_from_json(json_path, author_map_path, co_author_edgelist_path, skip_abnormal=True):
     """
     从json解析得到edgelist
+    :param skip_abnormal: 是否跳过年份为异常值的数据
     :param json_path: json数据文件路径
     :param author_map_path: 作者id映射表的输出路径
     :param co_author_edgelist_path: 时间片输出目录
@@ -34,14 +35,18 @@ def split_from_json(json_path, author_map_path, co_author_edgelist_path):
         # 注意year标签并不一定出现，此时考虑使用mdate字段的年份替代
         if "year" in record.keys():
             if record["year"] not in time_cluster.keys():
-                time_cluster[record["year"]] = [record]
+                # 识别年份为异常值的数据
+                if skip_abnormal is False or len(record["year"]) == 4:
+                    time_cluster[record["year"]] = [record]
             else:
                 time_cluster[record["year"]].append(record)
         elif "mdate" in record.keys():
             # 使用mdate中的年份代替year字段
             m_date_year = str(record["mdate"]).split("-")[0]  # mdate中的年份
             if m_date_year not in time_cluster.keys():
-                time_cluster[m_date_year] = [record]
+                # 识别年份为异常的数据
+                if skip_abnormal is False or len(m_date_year) == 4:
+                    time_cluster[m_date_year] = [record]
             else:
                 time_cluster[m_date_year].append(record)
         # 生成作者的id映射表
