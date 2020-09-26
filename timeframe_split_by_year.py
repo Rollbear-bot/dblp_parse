@@ -89,7 +89,7 @@ def split_from_json(json_path, author_map_path, co_author_edgelist_path, skip_ab
                 #                     "\n")
 
                 # 对合著者生成完全子图
-                for author_index, cur_author in enumerate(record["author"]):
+                for author_index, cur_author in enumerate(tqdm(record["author"])):
                     if author_index < len(record["author"]) - 1:  # 如果当前元素是列表的末位，就不用处理了
                         other_authors = record["author"][author_index + 1:]
                         for other_author_index, other_author in enumerate(other_authors):
@@ -101,6 +101,7 @@ def split_from_json(json_path, author_map_path, co_author_edgelist_path, skip_ab
                             # 边表直接写入文件，不保存在内存，防止爆内存
                             edge_str = str(author_map[cur_author]) + " " + \
                                      str(author_map[other_author])
+
                             # 最后一行不加换行符
                             if not i == len(record_item[1])-1 and \
                                     author_index == len(record["author"])-1 and \
