@@ -83,45 +83,45 @@ def split_from_json(json_path, author_map_path, co_author_edgelist_path,
         print(f"{record_index + 1}/{len(time_frame)}")
 
         # edgelist = []
-        with open(co_author_edgelist_path + str(record_item[0]) + ".edgelist", "w") as wf:
-            for i, record in enumerate(tqdm(record_item[1])):
-                # 生成从一作到其他合著者的边，用空格作为两个节点的分隔符
-                # for co_author in record["author"][1:]:
-                #     edgelist.append(str(author_map[record["author"][0]]) +
-                #                     " " +
-                #                     str(author_map[co_author]) +
-                #                     "\n")
+        with open(abnormal_log_path, "w") as ab_f:
+            with open(co_author_edgelist_path + str(record_item[0]) + ".edgelist", "w") as wf:
+                for i, record in enumerate(tqdm(record_item[1])):
+                    # 生成从一作到其他合著者的边，用空格作为两个节点的分隔符
+                    # for co_author in record["author"][1:]:
+                    #     edgelist.append(str(author_map[record["author"][0]]) +
+                    #                     " " +
+                    #                     str(author_map[co_author]) +
+                    #                     "\n")
 
-                # todo::跳过合著者过高的记录，否则会导致时间开销过大
-                if len(record["author"]) > max_co_authors:
-                    # 将合著者数量异常的记录信息输出到文件
-                    with open(abnormal_log_path, "w") as ab_f:
+                    # todo::跳过合著者过高的记录，否则会导致时间开销过大
+                    if len(record["author"]) > max_co_authors:
+                        # 将合著者数量异常的记录信息输出到文件
                         ab_f.write(record["title"] + ";" + str(len(record["author"])) + "\n")
-                    continue
-                # 对合著者生成完全子图
-                for author_index, cur_author in enumerate(record["author"]):
-                    if author_index < len(record["author"]) - 1:  # 如果当前元素是列表的末位，就不用处理了
-                        other_authors = record["author"][author_index + 1:]
-                        for other_author_index, other_author in enumerate(other_authors):
-                            # edgelist.append(str(author_map[cur_author]) +
-                            #                 " " +
-                            #                 str(author_map[other_author]) +
-                            #                 "\n")
+                        continue
+                    # 对合著者生成完全子图
+                    for author_index, cur_author in enumerate(record["author"]):
+                        if author_index < len(record["author"]) - 1:  # 如果当前元素是列表的末位，就不用处理了
+                            other_authors = record["author"][author_index + 1:]
+                            for other_author_index, other_author in enumerate(other_authors):
+                                # edgelist.append(str(author_map[cur_author]) +
+                                #                 " " +
+                                #                 str(author_map[other_author]) +
+                                #                 "\n")
 
-                            # 边表直接写入文件，不保存在内存，防止爆内存
-                            edge_str = str(author_map[cur_author]) + " " + \
-                                     str(author_map[other_author])
+                                # 边表直接写入文件，不保存在内存，防止爆内存
+                                edge_str = str(author_map[cur_author]) + " " + \
+                                         str(author_map[other_author])
 
-                            # 最后一行不加换行符
-                            if not i == len(record_item[1])-1 and \
-                                    author_index == len(record["author"])-1 and \
-                                    other_author_index == len(other_authors)-1:
-                                edge_str += "\n"
-                            wf.write(edge_str)
+                                # 最后一行不加换行符
+                                if not i == len(record_item[1])-1 and \
+                                        author_index == len(record["author"])-1 and \
+                                        other_author_index == len(other_authors)-1:
+                                    edge_str += "\n"
+                                wf.write(edge_str)
 
-            # 去掉最后一行末尾的换行符
-            # edgelist[-1] = edgelist[-1].rstrip()
-            # wf.writelines(edgelist)
+                # 去掉最后一行末尾的换行符
+                # edgelist[-1] = edgelist[-1].rstrip()
+                # wf.writelines(edgelist)
 
 
 if __name__ == '__main__':
