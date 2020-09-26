@@ -10,13 +10,17 @@ import json
 from functools import reduce  # 列表累加
 
 
-def split_from_json(json_path, author_map_path, co_author_edgelist_path, skip_abnormal=True):
+def split_from_json(json_path, author_map_path, co_author_edgelist_path,
+                    max_co_authors: int, abnormal_log_path,
+                    skip_abnormal=True):
     """
     从json解析得到edgelist
     :param skip_abnormal: 是否跳过年份为异常值的数据
     :param json_path: json数据文件路径
     :param author_map_path: 作者id映射表的输出路径
     :param co_author_edgelist_path: 时间片输出目录
+    :param max_co_authors: 最大合著者限制（控制时间开销）
+    :param abnormal_log_path: 异常数据信息输出路径
     :return: None
     """
     with open(json_path, "r") as rf:
@@ -88,8 +92,14 @@ def split_from_json(json_path, author_map_path, co_author_edgelist_path, skip_ab
                 #                     str(author_map[co_author]) +
                 #                     "\n")
 
+                # todo::跳过合著者过高的记录，否则会导致时间开销过大
+                if len(record["author"]) > max_co_authors:
+                    # 将合著者数量异常的记录信息输出到文件
+                    with open(abnormal_log_path, "w") as ab_f:
+                        ab_f.write(record["title"] + ";" + str(len(record["author"])) + "\n")
+                    continue
                 # 对合著者生成完全子图
-                for author_index, cur_author in enumerate(tqdm(record["author"])):
+                for author_index, cur_author in enumerate(record["author"]):
                     if author_index < len(record["author"]) - 1:  # 如果当前元素是列表的末位，就不用处理了
                         other_authors = record["author"][author_index + 1:]
                         for other_author_index, other_author in enumerate(other_authors):
@@ -129,7 +139,11 @@ if __name__ == '__main__':
         json_data_input_path = f"./resource/{t}_co_author_data.json"
         dataset_dump_path = working_dir + t + "/"
         author_map_dump_path = working_dir + t + f"/{t}_author_map.json"
+        abnormal_log = working_dir + t + f"/{t}_abnormal_data_log.txt"
+
         # 生成时间片
         split_from_json(json_data_input_path,
                         author_map_dump_path,
-                        dataset_dump_path)
+                        dataset_dump_path,
+                        max_co_authors=1000,
+                        abnormal_log_path=abnormal_log)
