@@ -80,7 +80,7 @@ def split_from_json(json_path, author_map_path, co_author_edgelist_path, skip_ab
 
         # edgelist = []
         with open(co_author_edgelist_path + str(record_item[0]) + ".edgelist", "w") as wf:
-            for i, record in tqdm(enumerate(record_item[1])):
+            for i, record in enumerate(tqdm(record_item[1])):
                 # 生成从一作到其他合著者的边，用空格作为两个节点的分隔符
                 # for co_author in record["author"][1:]:
                 #     edgelist.append(str(author_map[record["author"][0]]) +
