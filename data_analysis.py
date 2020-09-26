@@ -48,10 +48,10 @@ def dataset_description(working_dir: str, skip_abnormal_edgelist=True):
 
 if __name__ == '__main__':
     avail_types = ["phdthesis",
-                   # "article",
-                   # "inproceedings",
-                   # "book",
-                   # "incollection",
+                   "article",
+                   "inproceedings",
+                   "book",
+                   "incollection",
                    "www"]
     for t in tqdm(avail_types):
         wd = "./resource/co_author/" + t + "/"
