@@ -110,12 +110,12 @@ def split_from_json(json_path, author_map_path, co_author_edgelist_path,
 
                                 # 边表直接写入文件，不保存在内存，防止爆内存
                                 edge_str = str(author_map[cur_author]) + " " + \
-                                         str(author_map[other_author])
+                                           str(author_map[other_author])
 
                                 # 最后一行不加换行符
-                                if not i == len(record_item[1])-1 and \
-                                        author_index == len(record["author"])-1 and \
-                                        other_author_index == len(other_authors)-1:
+                                if not (i == len(record_item[1]) - 1 and
+                                        author_index == len(record["author"]) - 1 and
+                                        other_author_index == len(other_authors) - 1):
                                     edge_str += "\n"
                                 wf.write(edge_str)
 
