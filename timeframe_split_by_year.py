@@ -13,7 +13,8 @@ import datetime
 
 def split_from_json(json_path, author_map_path, co_author_edgelist_path,
                     max_co_authors: int, abnormal_log_path,
-                    skip_abnormal=True, with_timestamp=False):
+                    skip_abnormal=True, with_timestamp=False,
+                    segregating_str=" "):
     """
     从json解析得到edgelist
     :param skip_abnormal: 是否跳过年份为异常值的数据
@@ -23,6 +24,7 @@ def split_from_json(json_path, author_map_path, co_author_edgelist_path,
     :param max_co_authors: 最大合著者限制（控制时间开销）
     :param abnormal_log_path: 异常数据信息输出路径
     :param with_timestamp: 是否生成带时间戳的时间片（tiles算法格式）
+    :param segregating_str: edge中节点（或时间戳）的分隔字符，默认为空格
     :return: None
     """
     with open(json_path, "r") as rf:
@@ -106,7 +108,7 @@ def split_from_json(json_path, author_map_path, co_author_edgelist_path,
                             other_authors = record["author"][author_index + 1:]
                             for other_author_index, other_author in enumerate(other_authors):
                                 # 边表直接写入文件，不保存在内存，防止爆内存
-                                edge_str = str(author_map[cur_author]) + " " + \
+                                edge_str = str(author_map[cur_author]) + segregating_str + \
                                            str(author_map[other_author])
 
                                 if with_timestamp is True:
@@ -116,7 +118,7 @@ def split_from_json(json_path, author_map_path, co_author_edgelist_path,
                                     elif "mdate" in record.keys():
                                         time_array = time.strptime(record["mdate"], "%Y-%m-%d")
                                     time_stamp = time.mktime(time_array)
-                                    edge_str += (" " + str(time_stamp))
+                                    edge_str += (segregating_str + str(time_stamp))
 
                                 # 最后一行不加换行符
                                 if not (i == len(cur_frame) - 1 and
@@ -153,4 +155,5 @@ if __name__ == '__main__':
                         max_co_authors=1000,
                         abnormal_log_path=abnormal_log,
                         skip_abnormal=True,
-                        with_timestamp=True)
+                        with_timestamp=True,
+                        segregating_str="\t")
