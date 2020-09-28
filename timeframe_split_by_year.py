@@ -127,10 +127,10 @@ if __name__ == '__main__':
     # 处理服务器上的数据
     # proceedings和masterthesis类别是空的，这里不再处理
     avail_types = ["phdthesis",
-                   "article",
-                   "inproceedings",
-                   "book",
-                   "incollection",
+                   # "article",
+                   # "inproceedings",
+                   # "book",
+                   # "incollection",
                    "www"]
     for t in avail_types:
         print(f"\n--------------{t}----------------")
