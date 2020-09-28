@@ -111,7 +111,10 @@ def split_from_json(json_path, author_map_path, co_author_edgelist_path,
 
                                 if with_timestamp is True:
                                     # 生成时间戳
-                                    time_array = time.strptime(year, "%Y")
+                                    if "year" in record.keys():
+                                        time_array = time.strptime(record["year"], "%Y")
+                                    elif "mdate" in record.keys():
+                                        time_array = time.strptime(record["mdate"], "%Y-%m-%d")
                                     time_stamp = time.mktime(time_array)
                                     edge_str += (" " + str(time_stamp))
 
