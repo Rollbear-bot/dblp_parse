@@ -71,7 +71,7 @@ def split_from_json(json_path, author_map_path, co_author_edgelist_path,
     years = sorted(list(time_cluster.keys()))  # 数据中的所有年份（或有效年份）
     if with_timestamp is True:
         # tiles算法格式的时间片只包含末位年份
-        years = years[-1]
+        years = [years[-1]]
 
     for year in tqdm(years):
         # 处理time cluster为时间片
