@@ -113,7 +113,7 @@ def split_from_json(json_path, author_map_path, co_author_edgelist_path,
                                     # 生成时间戳
                                     time_array = time.strptime(year, "%Y")
                                     time_stamp = time.mktime(time_array)
-                                    edge_str += ("" + str(time_stamp))
+                                    edge_str += (" " + str(time_stamp))
 
                                 # 最后一行不加换行符
                                 if not (i == len(cur_frame) - 1 and
