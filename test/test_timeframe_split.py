@@ -49,7 +49,8 @@ class TestSplit(unittest.TestCase):
         json_path = "./test_res/www_co_author_data.json"
         author_map_path = "./test_res/test_split/author_map.json"
         co_author_edgelist_path = "./test_res/test_split/"
-        split_from_json(json_path, author_map_path, co_author_edgelist_path)
+        abnormal_log = "./test_res/test_split/abnormal_log.txt"
+        split_from_json(json_path, author_map_path, co_author_edgelist_path, 1000, abnormal_log, with_timestamp=True)
 
         # 检验生成的edgelist的准确性
         working_dir = "./test_res/test_split/"
@@ -73,6 +74,13 @@ class TestSplit(unittest.TestCase):
     #     author_map_path = "./test_res/test_split_incollection/author_map.json"
     #     co_author_edgelist_path = "./test_res/test_split_incollection/"
     #     split_from_json(json_path, author_map_path, co_author_edgelist_path)
+
+    # 谨慎运行这个测试单元
+    def test_split_article(self):
+        json_path = "./test_res/article_co_author_data.json"
+        author_map_path = "./test_res/test_split_article/author_map.json"
+        co_author_edgelist_path = "./test_res/test_split_article/"
+        split_from_json(json_path, author_map_path, co_author_edgelist_path)
 
 
 if __name__ == '__main__':
