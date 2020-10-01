@@ -131,14 +131,16 @@ def process(file_path: str):
 def main():
     test_file_path = "../dblp-2020-09-01.xml"
 
-    thesis_types = ["phdthesis",
-                    "article",
-                    "inproceedings",
-                    "proceedings",
-                    "book",
-                    "incollection",
-                    "mastersthesis",
-                    "www"]
+    thesis_types = [
+        # "phdthesis",
+        # "article",
+        # "inproceedings",
+        "proceedings",
+        # "book",
+        # "incollection",
+        "mastersthesis",
+        # "www"
+    ]
     for t in tqdm(thesis_types):
         global THESIS_TYPE, DATA_LT, CUR_COUNT, TOTAL_COUNT  # 绑定到全局变量
         THESIS_TYPE = t  # 设置本轮迭代的文献类型
