@@ -14,6 +14,7 @@ import datetime
 def split_from_json(json_path, author_map_path, co_author_edgelist_path,
                     max_co_authors: int, abnormal_log_path,
                     skip_abnormal=True, with_timestamp=False,
+                    year_stamp=False,
                     segregating_str=" "):
     """
     从json解析得到edgelist
@@ -24,6 +25,7 @@ def split_from_json(json_path, author_map_path, co_author_edgelist_path,
     :param max_co_authors: 最大合著者限制（控制时间开销）
     :param abnormal_log_path: 异常数据信息输出路径
     :param with_timestamp: 是否生成带时间戳的时间片（tiles算法格式）
+    :param year_stamp: 是否使用年份格式时间戳（TSCAN算法格式）
     :param segregating_str: edge中节点（或时间戳）的分隔字符，默认为空格
     :return: None
     """
@@ -113,11 +115,18 @@ def split_from_json(json_path, author_map_path, co_author_edgelist_path,
 
                                 if with_timestamp is True:
                                     # 生成时间戳
-                                    if "year" in record.keys():
-                                        time_array = time.strptime(record["year"], "%Y")
-                                    elif "mdate" in record.keys():
-                                        time_array = time.strptime(record["mdate"], "%Y-%m-%d")
-                                    time_stamp = time.mktime(time_array)
+                                    if year_stamp is True:
+                                        # 使用年份时间戳（TSCAN算法格式）
+                                        if "year" in record.keys():
+                                            time_stamp = record["year"]
+                                        elif "mdate" in record.keys():
+                                            time_stamp = record["mdate"].split("-")[0]
+                                    else:
+                                        if "year" in record.keys():
+                                            time_array = time.strptime(record["year"], "%Y")
+                                        elif "mdate" in record.keys():
+                                            time_array = time.strptime(record["mdate"], "%Y-%m-%d")
+                                        time_stamp = time.mktime(time_array)
                                     edge_str += (segregating_str + str(time_stamp))
 
                                 # 最后一行不加换行符
@@ -141,7 +150,8 @@ if __name__ == '__main__':
         print(f"\n--------------{t}----------------")
 
         # working_dir = "./resource/co_author/"
-        working_dir = "../datasets/frame_with_timestamp/"
+        # working_dir = "../datasets/frame_with_timestamp/"
+        working_dir = "../datasets/yearstamp/"
 
         json_data_input_path = f"./resource/{t}_co_author_data.json"
         dataset_dump_path = working_dir + t + "/"
@@ -156,4 +166,5 @@ if __name__ == '__main__':
                         abnormal_log_path=abnormal_log,
                         skip_abnormal=True,
                         with_timestamp=True,
+                        year_stamp=True,
                         segregating_str="\t")
