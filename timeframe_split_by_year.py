@@ -4,29 +4,30 @@
 # @Filename: timeframe_split_by_year.py
 # 按照时间片分割edgelist（每年一个时间片）
 
-from tqdm import tqdm
 import json
-from functools import reduce  # 列表累加
 import time
-import datetime
+from functools import reduce  # 列表累加
+
+from tqdm import tqdm
 
 
 def split_from_json(json_path, author_map_path, co_author_edgelist_path,
                     max_co_authors: int, abnormal_log_path,
-                    skip_abnormal=True, with_timestamp=False,
-                    year_stamp=False,
-                    segregating_str=" "):
+                    skip_abnormal=True, segregating_str=" ",
+                    mode="default"):
     """
-    从json解析得到edgelist
+    从json解析得到edgelist/时间片
     :param skip_abnormal: 是否跳过年份为异常值的数据
     :param json_path: json数据文件路径
     :param author_map_path: 作者id映射表的输出路径
     :param co_author_edgelist_path: 时间片输出目录
     :param max_co_authors: 最大合著者限制（控制时间开销）
     :param abnormal_log_path: 异常数据信息输出路径
-    :param with_timestamp: 是否生成带时间戳的时间片（tiles算法格式）
-    :param year_stamp: 是否使用年份格式时间戳（TSCAN算法格式）
     :param segregating_str: edge中节点（或时间戳）的分隔字符，默认为空格
+    :param mode: 生成模式
+    1. mode == "tiles"，TILES时间片模式
+    2. mode == "tscan"，TSCAN时间片格式
+    3. mode == "default"，默认模式
     :return: None
     """
     with open(json_path, "r") as rf:
@@ -73,7 +74,7 @@ def split_from_json(json_path, author_map_path, co_author_edgelist_path,
     print("generating time frames...")
 
     years = sorted(list(time_cluster.keys()))  # 数据中的所有年份（或有效年份）
-    if with_timestamp is True:
+    if mode == "tiles" or mode == "tscan":
         # tiles算法格式的时间片只包含末位年份
         years = [years[-1]]
 
@@ -113,9 +114,9 @@ def split_from_json(json_path, author_map_path, co_author_edgelist_path,
                                 edge_str = str(author_map[cur_author]) + segregating_str + \
                                            str(author_map[other_author])
 
-                                if with_timestamp is True:
+                                if mode == "tiles" or mode == "tscan":
                                     # 生成时间戳
-                                    if year_stamp is True:
+                                    if mode == "tscan":
                                         # 使用年份时间戳（TSCAN算法格式）
                                         if "year" in record.keys():
                                             time_stamp = record["year"]
@@ -165,6 +166,5 @@ if __name__ == '__main__':
                         max_co_authors=1000,
                         abnormal_log_path=abnormal_log,
                         skip_abnormal=True,
-                        with_timestamp=True,
-                        year_stamp=True,
-                        segregating_str="\t")
+                        segregating_str="\t",
+                        mode="tscan")
